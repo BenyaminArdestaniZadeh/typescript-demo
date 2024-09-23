@@ -1,11 +1,17 @@
 "use client";
 import { Button, Flex, Heading } from "@radix-ui/themes";
 import { useSuperHerosData } from "../hooks/useSuperHerosData";
+import Link from "next/link";
+
+type RqProps = {
+  name: string;
+  id: number;
+};
 
 const RQHeros = () => {
   const { isLoading, data, refetch, isFetching } = useSuperHerosData();
 
-  console.log("data", data);
+  console.log("data", data?.data?.id);
 
   if (isLoading || isFetching) {
     return <Heading as="h4">Loading... </Heading>;
@@ -13,15 +19,22 @@ const RQHeros = () => {
   return (
     <Flex
       width={"100%"}
+      justify={"center"}
+      align={"center"}
       direction={"column"}
       gap={"4"}
-      style={{ border: "3px solid red" }}
     >
-      <Button onClick={() => refetch()}>Click here</Button>
-      {data?.map((item: string, index: number) => (
-        <Heading as="h3" key={index}>
-          {item}
-        </Heading>
+      <Button
+        size={"3"}
+        style={{ width: "fit-content" }}
+        onClick={() => refetch()}
+      >
+        Click here
+      </Button>
+      {data?.data?.map((item: RqProps, index: number) => (
+        <Link href={`/super-hero/hero-detail-${item?.id}`} key={index}>
+          <Heading as="h3">{item.name}</Heading>
+        </Link>
       ))}
     </Flex>
   );
